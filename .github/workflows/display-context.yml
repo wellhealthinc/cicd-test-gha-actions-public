@@ -33,7 +33,7 @@ jobs:
           hash=$(echo $context_json | md5sum | awk '{print $1}')
           mkdir -p contexts
           echo -ne "$context_json" > contexts/$hash
-          echo "::set-output name=filename::/contexts/$hash"
+          echo "::set-output name=filename::contexts/$hash"
       - name: Send to stdout
         if: inputs.output_to_stdout
         run: cat ${{ steps.context-file.outputs.filename }}
