@@ -7,6 +7,9 @@ on:
       output_to_stdout:
         type: boolean
         default: true
+      output_to_datadog:
+        type: boolean
+        default: false
       datadog_service:
         default: gha
         type: string
@@ -32,7 +35,7 @@ jobs:
         if: inputs.output_to_stdout
         run: cat contexts/${{ steps.context-file.outputs.filename }}
       - name: Send to DataDog
-        if: secrets.datadog_api_key == ''
+        if: inputs.output_to_datadog
         run: |
           curl -X POST "https://http-intake.logs.datadoghq.com/api/v2/logs?service=${{ inputs.datadog_service }}" \
           -H "Content-Type: text/plain" \
