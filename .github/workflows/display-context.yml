@@ -1,0 +1,39 @@
+on:
+  workflow_call:
+    inputs:
+      context_name:
+        type: string
+        default: github
+      output_to_stdout:
+        type: boolean
+        default: true
+      datadog_service:
+        default: gha
+        type: string
+    secrets:
+      datadog_api_key:
+        type: string
+        
+name: Display Context Info
+jobs:
+  contexts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output to File
+        id: context-file
+        run: |
+          context="${{ toJSON(${{ imputs.context_name }}) }}"
+          hash=$(echo $context | md5sum | awk '{print $1}'
+          mkdir -p contexts
+          echo -ne "$context" > contexts/$hash
+          echo "::set-output name=filename::$hash"
+      - name: Send to stdout
+        if: inputs.output_to_stdout
+        run: cat contexts/${{ steps.context-file.outputs.filename }}
+      - name: Send to DataDog
+        if: secrets.datadog_api_key != ''
+        run: |
+          curl -X POST "https://http-intake.logs.datadoghq.com/api/v2/logs?service=${{ inputs.datadog_service }}" \
+          -H "Content-Type: text/plain" \
+          -H "DD-API-KEY: ${{ secrets.datadog_api_key }}" \
+          -d @- << ${{ steps.context-file.outputs.filename }}
