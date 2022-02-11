@@ -22,22 +22,6 @@ jobs:
   contexts:
     runs-on: ubuntu-latest
     steps:
-      - name: Output to File
-        id: context-file
-        run: |
-          context_name=${{ inputs.context_name }}
-          context_json='${{ toJSON(github) }}'
-          hash=$(echo $context_json | md5sum | awk '{print $1}')
-          mkdir -p contexts
-          echo -ne "$context_json" > contexts/$hash
-          echo "::set-output name=filename::$hash"
       - name: Send to stdout
         if: inputs.output_to_stdout
-        run: cat contexts/${{ steps.context-file.outputs.filename }}
-      - name: Send to DataDog
-        if: inputs.output_to_datadog
-        run: |
-          curl -X POST "https://http-intake.logs.datadoghq.com/api/v2/logs?service=${{ inputs.datadog_service }}" \
-          -H "Content-Type: text/plain" \
-          -H "DD-API-KEY: ${{ secrets.datadog_api_key }}" \
-          -d @- << ${{ steps.context-file.outputs.filename }}
+        run: echo test
