@@ -12,7 +12,6 @@ on:
         type: string
     secrets:
       datadog_api_key:
-        type: string
         
 name: Display Context Info
 jobs:
@@ -22,10 +21,11 @@ jobs:
       - name: Output to File
         id: context-file
         run: |
-          context="${{ toJSON(${{ inputs.context_name }}) }}"
-          hash=$(echo $context | md5sum | awk '{print $1}'
+          context_name=${{ inputs.context_name }}
+          context_json="${{ toJSON($context_name) }}"
+          hash=$(echo $context_json | md5sum | awk '{print $1}'
           mkdir -p contexts
-          echo -ne "$context" > contexts/$hash
+          echo -ne "$context_json" > contexts/$hash
           echo "::set-output name=filename::$hash"
       - name: Send to stdout
         if: inputs.output_to_stdout
