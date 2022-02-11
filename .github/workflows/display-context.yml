@@ -13,9 +13,6 @@ on:
       datadog_service:
         default: gha
         type: string
-    secrets:
-      datadog_api_key:
-        required: true
 
 name: Display Context Info
 jobs:
@@ -23,5 +20,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send to stdout
-        if: inputs.output_to_stdout
         run: echo test
