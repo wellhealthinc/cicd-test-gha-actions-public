@@ -22,7 +22,7 @@ jobs:
       - name: Output to File
         id: context-file
         run: |
-          context="${{ toJSON(${{ imputs.context_name }}) }}"
+          context="${{ toJSON(${{ inputs.context_name }}) }}"
           hash=$(echo $context | md5sum | awk '{print $1}'
           mkdir -p contexts
           echo -ne "$context" > contexts/$hash
