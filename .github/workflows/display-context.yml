@@ -12,7 +12,8 @@ on:
         type: string
     secrets:
       datadog_api_key:
-        
+        required: true
+
 name: Display Context Info
 jobs:
   contexts:
