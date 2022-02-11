@@ -25,8 +25,11 @@ jobs:
       - name: Output to File
         id: context-file
         run: |
-          context_object=$({{ inputs.context_name }})
-          context_json=${{ toJSON(context_object) }}
+          if [[ ${{ inputs.context_name }} == 'github ]];
+          then
+            context_json=${{ toJSON(github) }}
+          fi
+
           hash=$(echo $context_json | md5sum | awk '{print $1}')
           mkdir -p contexts
           echo -ne "$context_json" > contexts/$hash
