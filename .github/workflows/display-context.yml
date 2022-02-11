@@ -11,8 +11,8 @@ on:
         type: boolean
         default: false
       datadog_service:
-        default: gha
         type: string
+        default: gha
 
 name: Display Context Info
 jobs:
