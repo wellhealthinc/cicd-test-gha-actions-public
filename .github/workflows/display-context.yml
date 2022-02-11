@@ -21,12 +21,13 @@ name: Display Context Info
 jobs:
   contexts:
     runs-on: ubuntu-latest
+    env:
+      CONTEXT_NAME: ${{ inputs.context_name }}
     steps:
       - name: Output to File
         id: context-file
         run: |
-          context_name=${{ inputs.context_name }}
-          context_call=${{ toJSON(\$\{!$context_name\}) }}
+          context_call=${{ toJSON(env.CONTEXT_NAME) }}
           context_json=$($context_call)
           hash=$(echo $context_json | md5sum | awk '{print $1}')
           mkdir -p contexts
