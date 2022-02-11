@@ -40,4 +40,4 @@ jobs:
           curl -X POST "https://http-intake.logs.datadoghq.com/api/v2/logs?service=${{ inputs.datadog_service }}" \
           -H "Content-Type: text/plain" \
           -H "DD-API-KEY: ${{ secrets.datadog_api_key }}" \
-          -d @${{ steps.context-file.outputs.filename }}
+          -d @contexts/${{ steps.context-file.outputs.filename }}
