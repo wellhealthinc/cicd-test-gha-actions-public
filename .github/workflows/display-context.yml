@@ -25,7 +25,7 @@ jobs:
       - name: Output to File
         id: context-file
         run: |
-          if [[ ${{ inputs.context_name }} == 'github ]];
+          if [[ '${{ inputs.context_name }}' == 'github' ]];
           then
             context_json=${{ toJSON(github) }}
           fi
