@@ -9,7 +9,7 @@ on:
         default: true
       output_to_datadog:
         type: boolean
-        default: false
+        default: true
       datadog_service:
         default: github-actions
         type: string
@@ -19,7 +19,7 @@ on:
 
 name: Display Context Info
 jobs:
-  contexts:
+  show-and-tell:
     runs-on: ubuntu-latest
     steps:
       - name: Output to File
