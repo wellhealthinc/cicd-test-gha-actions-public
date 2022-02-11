@@ -11,7 +11,7 @@ on:
         type: boolean
         default: false
       datadog_service:
-        default: gha
+        default: github-actions
         type: string
     secrets:
       datadog_api_key:
@@ -25,9 +25,15 @@ jobs:
       - name: Output to File
         id: context-file
         run: |
-          if [[ '${{ inputs.context_name }}' == 'github' ]];
-          then
-            context_json='${{ toJSON(github) }}'
+          if [[ '${{ inputs.context_name }}' == 'github' ]]; then context_json='${{ toJSON(github) }}';
+          elif [[ '${{ inputs.context_name }}' == 'env' ]]; then context_json='${{ toJSON(env) }}';
+          elif [[ '${{ inputs.context_name }}' == 'job' ]]; then context_json='${{ toJSON(job) }}';
+          elif [[ '${{ inputs.context_name }}' == 'steps' ]]; then context_json='${{ toJSON(steps) }}';
+          elif [[ '${{ inputs.context_name }}' == 'runner' ]]; then context_json='${{ toJSON(runner) }}';
+          elif [[ '${{ inputs.context_name }}' == 'secrets' ]]; then context_json='${{ toJSON(secrets) }}';
+          elif [[ '${{ inputs.context_name }}' == 'strategy' ]]; then context_json='${{ toJSON(strategy) }}';
+          elif [[ '${{ inputs.context_name }}' == 'matrix' ]]; then context_json='${{ toJSON(matrix) }}';
+          elif [[ '${{ inputs.context_name }}' == 'needs' ]]; then context_json='${{ toJSON(needs) }}';
           fi
 
           hash=$(echo $context_json | md5sum | awk '{print $1}')
@@ -37,7 +43,7 @@ jobs:
       - name: Send to stdout
         if: inputs.output_to_stdout
         run: cat ${{ steps.context-file.outputs.filename }}
-      - name: Send to DataDog
+      - name: Send to Datadog
         if: inputs.output_to_datadog
         run: |
           curl -X POST "https://http-intake.logs.datadoghq.com/api/v2/logs?service=${{ inputs.datadog_service }}" \
