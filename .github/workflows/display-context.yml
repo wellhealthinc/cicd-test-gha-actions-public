@@ -27,7 +27,7 @@ jobs:
         run: |
           if [[ '${{ inputs.context_name }}' == 'github' ]];
           then
-            context_json=${{ toJSON(github) }}
+            context_json='${{ toJSON(github) }}'
           fi
 
           hash=$(echo $context_json | md5sum | awk '{print $1}')
