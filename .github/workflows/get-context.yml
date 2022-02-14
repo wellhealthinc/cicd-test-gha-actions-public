@@ -11,11 +11,12 @@ on:
 name: Return context
 jobs:
   get_context:
+    name: Upload ${{ inputs.context_name }} object as an artifact
     runs-on: ubuntu-latest
     outputs:
       context_artifact: ${{ steps.get_context.outputs.context_artifact }}
     steps:
-      - name: Context for ${{ inputs.context_name }}
+      - name: Get ${{ inputs.context_name }} context
         id: get_context
         run: |
           if [[ '${{ inputs.context_name }}' == 'github' ]]; then context_json='${{ toJSON(github) }}';
@@ -34,7 +35,7 @@ jobs:
           echo -ne "$context_json" > contexts/$hash
 
           echo "::set-output name=context_artifact::$hash"
-      - name: Upload as an artifact
+      - name: Upload
         uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.get_context.outputs.context_artifact }}
