@@ -13,6 +13,7 @@ on:
 name: Send file contents to datadog
 jobs:
   send_to_datadog:
+    name: Send
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
