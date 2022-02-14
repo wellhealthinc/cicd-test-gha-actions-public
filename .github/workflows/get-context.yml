@@ -30,13 +30,13 @@ jobs:
           elif [[ '${{ inputs.context_name }}' == 'needs' ]]; then context_json='${{ toJSON(needs) }}';
           fi
 
-          mkdir -p contexts
+          mkdir -p context
           hash=$(echo -ne "$context_json" | md5sum | awk '{print $1}')
-          echo -ne "$context_json" > contexts/$hash
+          echo -ne "$context_json" > context/$hash
 
           echo "::set-output name=context_artifact::$hash"
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
           name: ${{ steps.get_context.outputs.context_artifact }}
-          path: contexts/${{ steps.get_context.outputs.context_artifact }}
+          path: context/${{ steps.get_context.outputs.context_artifact }}
