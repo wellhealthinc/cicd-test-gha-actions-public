@@ -1,0 +1,20 @@
+name: Send file contents to stdout
+
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        type: string
+
+jobs:
+  send_to_stdout:
+    name: Send
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ inputs.artifact_name }}
+      - name: Send to stdout
+        run: |
+          cat ${{ inputs.artifact_name }}

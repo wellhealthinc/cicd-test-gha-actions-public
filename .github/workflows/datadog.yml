@@ -1,3 +1,5 @@
+name: Send file contents to Datadog
+
 on:
   workflow_call:
     inputs:
@@ -10,7 +12,6 @@ on:
       datadog_api_key:
         required: true
 
-name: Send file contents to datadog
 jobs:
   send_to_datadog:
     name: Send

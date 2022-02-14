@@ -1,3 +1,5 @@
+name: Return context
+
 on:
   workflow_call:
     inputs:
@@ -8,7 +10,7 @@ on:
       context_artifact:
         description: 'Context artifact name'
         value: ${{ jobs.get_context.outputs.context_artifact }}
-name: Return context
+
 jobs:
   get_context:
     name: Upload ${{ inputs.context_name }} object as an artifact
