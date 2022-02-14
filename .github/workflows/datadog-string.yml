@@ -28,7 +28,9 @@ jobs:
             string_value=$(echo $string_value | base64 --decode)
           fi
 
+          echo $string_value > datadog_post
+
           curl -X POST "https://http-intake.logs.datadoghq.com/api/v2/logs?service=${{ inputs.datadog_service }}" \
           -H "Content-Type: text/plain" \
           -H "DD-API-KEY: ${{ secrets.datadog_api_key }}" \
-          -d $string_value
+          -d @datadog_post
