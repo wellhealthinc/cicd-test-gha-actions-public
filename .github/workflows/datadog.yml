@@ -1,0 +1,27 @@
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        type: string
+      datadog_service:
+        type: string
+        default: github-actions
+    secrets:
+      datadog_api_key:
+        required: true
+
+name: Send file contents to datadog
+jobs:
+  send_to_datadog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ inputs.artifact_name }}
+      - name: Send to Datadog
+        run: |
+          curl -X POST "https://http-intake.logs.datadoghq.com/api/v2/logs?service=${{ inputs.datadog_service }}" \
+          -H "Content-Type: text/plain" \
+          -H "DD-API-KEY: ${{ secrets.datadog_api_key }}" \
+          -d @${{ inputs.artifact_name }}
