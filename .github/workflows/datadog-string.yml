@@ -22,13 +22,16 @@ jobs:
     steps:
       - name: Send to Datadog
         run: |
-          string_value='${{ inputs.string_value }}'
+          string_value=$(cat <<'EOF'
+          ${{ inputs.string_value }}
+          EOF)
+          
           if [[ '${{ inputs.base64_encoded }}' == 'true' ]];
           then
             string_value=$(echo $string_value | base64 --decode)
           fi
 
-          echo $string_value > datadog_post
+          echo "$string_value" > datadog_post
 
           curl -X POST "https://http-intake.logs.datadoghq.com/api/v2/logs?service=${{ inputs.datadog_service }}" \
           -H "Content-Type: text/plain" \

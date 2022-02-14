@@ -16,9 +16,13 @@ jobs:
     steps:
       - name: Send to stdout
         run: |
+          string_value=$(cat <<'EOF'
+          ${{ inputs.string_value }}
+          EOF)
+
           if [[ '${{ inputs.base64_encoded }}' == 'true' ]];
           then
-            echo ${{ inputs.string_value }} | base64 --decode
-          else
-            echo ${{ inputs.string_value }}
+            string_value=$(echo $string_value | base64 --decode)
           fi
+
+          echo "$string_value"
