@@ -7,22 +7,14 @@ on:
         type: string
 
 jobs:
-  artifact_as_string:
-    name: Get artifact as string
+  send_to_stdout:
+    name: Send
     runs-on: ubuntu-latest
-    outputs:
-      context_string: ${{ steps.stringify.outputs.context_string }}
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
           name: ${{ inputs.artifact_name }}
-      - name: Stringify it
-        id: stringify
-        run: echo "::set-output name=context_string::$(cat ${{ inputs.artifact_name }})"
-  context_stdout:
-    name: Output to stdout
-    needs: artifact_as_string
-    uses: wellhealthinc/cicd-test-gha-actions-public/.github/workflows/stdout-string.yml@v1.900
-    with:
-      string_value: ${{ needs.artifact_as_string.outputs.context_string }}
+      - name: Send to stdout
+        run: |
+          cat ${{ inputs.artifact_name }}
