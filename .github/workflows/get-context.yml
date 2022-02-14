@@ -12,6 +12,8 @@ name: Return context
 jobs:
   get_context:
     runs-on: ubuntu-latest
+    outputs:
+      context_json_base64: ${{ steps.get_context.outputs.context_json_base64 }}
     steps:
       - name: Context for ${{ inputs.context_name }}
         id: get_context
