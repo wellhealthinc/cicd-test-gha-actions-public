@@ -5,8 +5,8 @@ on:
         type: string
         default: github
     outputs:
-      context_base64_file:
-        description: 'Context artifact hash'
+      context_artifact:
+        description: 'Context artifact name'
         value: ${{ jobs.get_context.outputs.context_artifact }}
 name: Return context
 jobs:
