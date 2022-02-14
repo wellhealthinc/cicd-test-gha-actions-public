@@ -1,0 +1,16 @@
+name: Send string contents to stdout
+
+on:
+  workflow_call:
+    inputs:
+      string_value:
+        type: string
+
+jobs:
+  send_to_stdout:
+    name: Send
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send to stdout
+        run: |
+          echo ${{ inputs.string_value }}
