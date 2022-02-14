@@ -5,15 +5,15 @@ on:
         type: string
         default: github
     outputs:
-      context_json_base64:
-        description: 'Context JSON, base64'
-        value: ${{ jobs.get_context.outputs.context_json_base64 }}
+      context_base64_file:
+        description: 'Context artifact hash'
+        value: ${{ jobs.get_context.outputs.context_artifact }}
 name: Return context
 jobs:
   get_context:
     runs-on: ubuntu-latest
     outputs:
-      context_json_base64: ${{ steps.get_context.outputs.context_json_base64 }}
+      context_artifact: ${{ steps.get_context.outputs.context_artifact }}
     steps:
       - name: Context for ${{ inputs.context_name }}
         id: get_context
@@ -29,5 +29,13 @@ jobs:
           elif [[ '${{ inputs.context_name }}' == 'needs' ]]; then context_json='${{ toJSON(needs) }}';
           fi
 
-          context_base64=$(echo -ne "$context_json" | base64 | tr -d '\n' | tr -d '=')
-          echo "::set-output name=context_json_base64::$context_base64"
+          mkdir -p contexts
+          hash=$(echo -ne "$context_json" | md5sum | awk '{print $1}')
+          echo -ne "$context_base64" > contexts/$hash
+
+          echo "::set-output name=context_artifact::$hash"
+      - name: Upload as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.get_context.outputs.context_artifact }}
+          path: contexts/${{ steps.get_context.outputs.context_artifact }}
