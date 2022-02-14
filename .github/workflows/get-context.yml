@@ -31,7 +31,7 @@ jobs:
 
           mkdir -p contexts
           hash=$(echo -ne "$context_json" | md5sum | awk '{print $1}')
-          echo -ne "$context_base64" > contexts/$hash
+          echo -ne "$context_json" > contexts/$hash
 
           echo "::set-output name=context_artifact::$hash"
       - name: Upload as an artifact
