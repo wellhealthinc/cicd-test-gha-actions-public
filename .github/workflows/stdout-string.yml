@@ -18,7 +18,8 @@ jobs:
         run: |
           string_value=$(cat <<'EOF'
           ${{ inputs.string_value }}
-          EOF)
+          EOF
+          )
 
           if [[ '${{ inputs.base64_encoded }}' == 'true' ]];
           then
