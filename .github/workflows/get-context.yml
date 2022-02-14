@@ -1,0 +1,31 @@
+on:
+  workflow_call:
+    inputs:
+      context_name:
+        type: string
+        default: github
+    outputs:
+      context_json_base64:
+        description: 'Context JSON, base64'
+        value: ${{ steps.get_context.outputs.context_json_base64 }}
+name: Return context
+jobs:
+  get_context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Context for ${{ inputs.context_name }}
+        id: get_context
+        run: |
+          if [[ '${{ inputs.context_name }}' == 'github' ]]; then context_json='${{ toJSON(github) }}';
+          elif [[ '${{ inputs.context_name }}' == 'env' ]]; then context_json='${{ toJSON(env) }}';
+          elif [[ '${{ inputs.context_name }}' == 'job' ]]; then context_json='${{ toJSON(job) }}';
+          elif [[ '${{ inputs.context_name }}' == 'steps' ]]; then context_json='${{ toJSON(steps) }}';
+          elif [[ '${{ inputs.context_name }}' == 'runner' ]]; then context_json='${{ toJSON(runner) }}';
+          elif [[ '${{ inputs.context_name }}' == 'secrets' ]]; then context_json='${{ toJSON(secrets) }}';
+          elif [[ '${{ inputs.context_name }}' == 'strategy' ]]; then context_json='${{ toJSON(strategy) }}';
+          elif [[ '${{ inputs.context_name }}' == 'matrix' ]]; then context_json='${{ toJSON(matrix) }}';
+          elif [[ '${{ inputs.context_name }}' == 'needs' ]]; then context_json='${{ toJSON(needs) }}';
+          fi
+
+          context_base64=$(echo -ne "$context_json" | base64)
+          echo "::set-output name=context_json_base64::$context_base64"
