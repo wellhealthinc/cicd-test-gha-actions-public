@@ -8,6 +8,9 @@ on:
       datadog_service:
         type: string
         default: github-actions
+      base64_encoded:
+        type: boolean
+        default: false
     secrets:
       datadog_api_key:
         required: true
@@ -19,7 +22,13 @@ jobs:
     steps:
       - name: Send to Datadog
         run: |
+          string_value='${{ inputs.string_value }}'
+          if [[ '${{ inputs.base64_encoded }}' == 'true' ]];
+          then
+            string_value=$(echo $string_value | base64 --decode)
+          fi
+
           curl -X POST "https://http-intake.logs.datadoghq.com/api/v2/logs?service=${{ inputs.datadog_service }}" \
           -H "Content-Type: text/plain" \
           -H "DD-API-KEY: ${{ secrets.datadog_api_key }}" \
-          -d ${{ inputs.string_value }}
+          -d $string_value
