@@ -29,5 +29,5 @@ jobs:
           elif [[ '${{ inputs.context_name }}' == 'needs' ]]; then context_json='${{ toJSON(needs) }}';
           fi
 
-          context_base64=$(echo $context_json | base64)
+          context_base64=$(echo -ne "$context_json" | base64 --wrap=0)
           echo "::set-output name=context_json_base64::$context_base64"
