@@ -5,6 +5,9 @@ on:
     inputs:
       artifact_name:
         type: string
+      base64_encoded:
+        type: boolean
+        default: false
 
 jobs:
   send_to_stdout:
@@ -17,4 +20,9 @@ jobs:
           name: ${{ inputs.artifact_name }}
       - name: Send to stdout
         run: |
-          cat ${{ inputs.artifact_name }}
+          if [[ '${{ inputs.base64_encoded }}' == 'true' ]];
+          then
+            cat ${{ inputs.artifact_name }} | base64 --decode
+          else
+            cat ${{ inputs.artifact_name }}
+          fi

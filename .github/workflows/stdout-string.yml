@@ -5,6 +5,9 @@ on:
     inputs:
       string_value:
         type: string
+      base64_encoded:
+        type: boolean
+        default: false
 
 jobs:
   send_to_stdout:
@@ -13,4 +16,9 @@ jobs:
     steps:
       - name: Send to stdout
         run: |
-          echo ${{ inputs.string_value }}
+          if [[ '${{ inputs.base64_encoded }}' == 'true' ]];
+          then
+            echo ${{ inputs.string_value }} | base64 --decode
+          else
+            echo ${{ inputs.string_value }}
+          fi
