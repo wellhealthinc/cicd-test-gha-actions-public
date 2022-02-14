@@ -1,4 +1,4 @@
-name: Create context artifact
+name: Get context artifact
 
 on:
   workflow_call:
