@@ -7,7 +7,7 @@ on:
     outputs:
       context_json_base64:
         description: 'Context JSON, base64'
-        value: ${{ steps.get_context.outputs.context_json_base64 }}
+        value: ${{ jobs.get_context.outputs.context_json_base64 }}
 name: Return context
 jobs:
   get_context:
