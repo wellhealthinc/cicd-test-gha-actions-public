@@ -1,4 +1,4 @@
-name: Send file contents to Datadog
+name: Send artifact contents to Datadog
 
 on:
   workflow_call:

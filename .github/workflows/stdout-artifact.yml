@@ -1,4 +1,4 @@
-name: Send file contents to stdout
+name: Send artifact contents to stdout
 
 on:
   workflow_call:
