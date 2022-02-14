@@ -23,6 +23,6 @@ jobs:
   context_stdout:
     name: Output to stdout
     needs: artifact_as_string
-    uses: ./.github/workflows/stdout-string.yml@v1.900
+    uses: wellhealthinc/cicd-test-gha-actions-public/.github/workflows/stdout-string.yml@v1.900
     with:
       string_value: ${{ needs.artifact_as_string.outputs.context_string }}
