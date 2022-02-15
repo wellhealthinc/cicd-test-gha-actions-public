@@ -35,6 +35,6 @@ jobs:
     strategy:
       matrix: ${{ fromJSON(needs.parent_step.outputs.concurrent_steps) }}
       max-parallel: ${{ inputs.maximum_parallel_steps }}
-      steps:
+    steps:
       - run: |
           echo "${{ matrix.value }}"
