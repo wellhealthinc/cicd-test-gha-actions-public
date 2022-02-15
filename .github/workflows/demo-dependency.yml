@@ -38,14 +38,3 @@ jobs:
       - name: Display concurrent string
         run: echo ${{ needs.parent_step.outputs.concurrent_steps }}
 
-  concurrent_step:
-    name: Run concurrent steps
-    needs: [ parent_step ]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJSON(needs.parent_step.outputs.concurrent_steps) }}
-      max-parallel: ${{ inputs.maximum_parallel_steps }}
-    steps:
-      - name: Running ${{ matrix.step_value }}
-        run: |
-          echo ${{ matrix.step_value }}
