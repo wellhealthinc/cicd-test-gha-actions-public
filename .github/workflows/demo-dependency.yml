@@ -17,7 +17,7 @@ jobs:
       - name: Set up concurrency
         id: setup
         run: |
-          echo '::set-output name=step_list::[1, 2, 3]'
+          echo '::set-output name=step_list::[\"1\", \"2\", \"3\"]'
 
   concurrent_step:
     needs: [ parent_step ]
