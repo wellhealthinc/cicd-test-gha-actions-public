@@ -29,6 +29,14 @@ jobs:
 
           echo '::set-output name=step_list::{"step_value":['$concurrent_string']}'
 
+  sanity_check:
+    name: Sanity check
+    needs: [ parent_step ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Display concurrent string
+        run: echo ${{ needs.parent_step.outputs.concurrent_steps }}
+
   concurrent_step:
     name: Run concurrent steps
     needs: [ parent_step ]
@@ -39,4 +47,4 @@ jobs:
     steps:
       - name: Running ${{ matrix.step_value }}
         run: |
-          echo "${{ matrix.step_value }}"
+          echo ${{ matrix.step_value }}
