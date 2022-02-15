@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        value: ${{ toJSON('["1", "2", "3"]') }}
+        value: ${{ toJSON('{ "test": ["1", "2", "3"] }') }}
     steps:
       - run: |
           echo "${{ matrix.value }}"
