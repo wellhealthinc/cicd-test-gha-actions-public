@@ -74,4 +74,4 @@ jobs:
           echo Running: ${{ matrix.step_value }}
       - name: Another step for ${{ matrix.step_value }}
         run: |
-          echo Hello, running ${{ matrix.step_value }} again
+          echo Hello, running something else for ${{ matrix.step_value }}
