@@ -20,13 +20,13 @@ jobs:
       - name: Set up concurrency
         id: setup
         run: |
-          declare -a concurrent
-          for (( step_number=1; step_number <= ${{ inputs.concurrent_steps }}; step_number++ ))
-          do
-            concurrent+='"Step #'$step_number'"'
-          done
-
-          echo '::set-output name=step_list::{"value":['$(IFS=, ; echo "${concurrent[*]}")']}'
+          # declare -a concurrent
+          # for (( step_number=1; step_number <= ${{ inputs.concurrent_steps }}; step_number++ ))
+          # do
+          #   concurrent+='"Step #'$step_number'"'
+          # done
+          concurrent_string='"Step 1", "Step 2", "Step 3"'
+          echo '::set-output name=step_list::{"value":['$concurrent_string']}'
 
   concurrent_step:
     name: Run concurrent steps
