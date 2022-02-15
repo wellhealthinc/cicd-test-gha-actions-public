@@ -17,7 +17,7 @@ jobs:
       - name: Set up concurrency
         id: setup
         run: |
-          echo '::set-output name=step_list::[\"1\", \"2\", \"3\"]'
+          echo '::set-output name=step_list::{"value":["1", "2", "3"]}'
 
   check_parent_output:
     name: Debug parent step
@@ -33,8 +33,7 @@ jobs:
     needs: [ parent_step, check_parent_output ]
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        value: ${{ toJSON('{ "test": ["1", "2", "3"] }') }}
+      matrix: ${{ fromJSON(needs.parent_step.outputs.concurrent_steps) }}
     steps:
       - run: |
           echo "${{ matrix.value }}"
