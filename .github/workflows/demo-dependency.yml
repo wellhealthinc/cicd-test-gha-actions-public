@@ -11,12 +11,14 @@ on:
         default: 2
 
 jobs:
-  parent_step:
-    name: Parent step
+  parent_job:
+    name: Parent job
     runs-on: ubuntu-latest
     outputs:
       concurrent_steps: ${{ steps.setup.outputs.step_list }}
     steps:
+      - name: Initial step
+        run: echo This is the first step
       - name: Set up concurrency
         id: setup
         run: |
@@ -29,14 +31,47 @@ jobs:
 
           echo '::set-output name=step_list::{"step_value":['$concurrent_string']}'
 
+  dependency_job1:
+    name: Dependency job 1
+    needs: [ parent_job ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Initial step
+        run: echo This is the first step
+      - name: Another step
+        run: echo This is another step
+
+  dependency_job2:
+    name: Dependency job 2
+    needs: [ parent_job ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Initial step
+        run: echo This is the first step
+      - name: Another step
+        run: echo This is another step
+
+  dependency_job3:
+    name: Dependency job 3
+    needs: [ parent_job ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Initial step
+        run: echo This is the first step
+      - name: Another step
+        run: echo This is another step
+
   concurrent_step:
-    name: Run concurrent steps
-    needs: [ parent_step ]
+    name: Run concurrent steps after job 2
+    needs: [ parent_job, dependency_job2 ]
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.parent_step.outputs.concurrent_steps) }}
+      matrix: ${{ fromJSON(needs.parent_job.outputs.concurrent_steps) }}
       max-parallel: ${{ inputs.maximum_parallel_steps }}
     steps:
       - name: Running ${{ matrix.step_value }}
         run: |
           echo Running: ${{ matrix.step_value }}
+      - name: Another step for ${{ matrix.step_value }}
+        run: |
+          echo Hello, running ${{ matrix.step_value }} again
