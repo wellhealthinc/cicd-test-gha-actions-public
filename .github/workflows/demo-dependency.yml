@@ -20,13 +20,14 @@ jobs:
       - name: Set up concurrency
         id: setup
         run: |
-          # declare -a concurrent
-          # for (( step_number=1; step_number <= ${{ inputs.concurrent_steps }}; step_number++ ))
-          # do
-          #   concurrent+='"Step #'$step_number'"'
-          # done
-          concurrent_string='"Step 1", "Step 2", "Step 3"'
-          echo '::set-output name=step_list::{"value":['$concurrent_string']}'
+          concurrent_string=""
+          for (( step_number=1; step_number <= ${{ inputs.concurrent_steps }}; step_number++ ))
+          do
+            concurrent_string=$concurrent_string,'"step #'$step_number'",'
+          done
+          concurrent_string=$(echo $concurrent_string | sed -r 's/,$//')
+
+          echo '::set-output name=step_list::{"step_value":['$concurrent_string']}'
 
   concurrent_step:
     name: Run concurrent steps
@@ -36,5 +37,6 @@ jobs:
       matrix: ${{ fromJSON(needs.parent_step.outputs.concurrent_steps) }}
       max-parallel: ${{ inputs.maximum_parallel_steps }}
     steps:
-      - run: |
-          echo "${{ matrix.value }}"
+      - name: Running ${{ matrix.step_value }}
+        run: |
+          echo "${{ matrix.step_value }}"
