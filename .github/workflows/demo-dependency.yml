@@ -27,14 +27,16 @@ jobs:
           done
           concurrent_string=$(echo $concurrent_string | sed -r 's/,$//')
 
-          echo $concurrent_string
           echo '::set-output name=step_list::{"step_value":['$concurrent_string']}'
 
-  sanity_check:
-    name: Sanity check
+  concurrent_step:
+    name: Run concurrent steps
     needs: [ parent_step ]
     runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJSON(needs.parent_step.outputs.concurrent_steps) }}
+      max-parallel: ${{ inputs.maximum_parallel_steps }}
     steps:
-      - name: Display concurrent string
-        run: echo ${{ needs.parent_step.outputs.concurrent_steps }}
-
+      - name: Running ${{ matrix.step_value }}
+        run: |
+          echo ${{ matrix.step_value }}
