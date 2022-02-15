@@ -23,7 +23,7 @@ jobs:
           concurrent_string=""
           for (( step_number=1; step_number <= ${{ inputs.concurrent_steps }}; step_number++ ))
           do
-            concurrent_string=$concurrent_string,'"step #'$step_number'",'
+            concurrent_string=${concurrent_string}'"step #'$step_number'",'
           done
           concurrent_string=$(echo $concurrent_string | sed -r 's/,$//')
 
