@@ -27,6 +27,7 @@ jobs:
           done
           concurrent_string=$(echo $concurrent_string | sed -r 's/,$//')
 
+          echo $concurrent_string
           echo '::set-output name=step_list::{"step_value":['$concurrent_string']}'
 
   sanity_check:
