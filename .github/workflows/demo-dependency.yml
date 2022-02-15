@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        value: ${{ fromJson(needs.parent_step.outputs.concurrent_steps) }}
+        value: ${{ toJSON(["1", "2", "3"]) }}
     steps:
       - run: |
           echo "${{ matrix.value }}"
