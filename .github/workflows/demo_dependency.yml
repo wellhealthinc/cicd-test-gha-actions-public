@@ -1,0 +1,30 @@
+name: Dependencies within a module
+
+on:
+  workflow_call:
+    inputs:
+      concurrent_steps:
+        type: number
+        default: 3
+
+jobs:
+  parent_step:
+    name: Parent step
+    runs-on: ubuntu-latest
+    outputs:
+      concurrent_steps: ${{ steps.matrix.outputs.step_list }}
+    steps:
+      - name: Set up concurrency
+      - id: setup
+        run: |
+          echo '::set-output name=step_list::[1, 2, 3]'
+
+  concurrent_step:
+    needs: [ parent_step ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        value: ${{fromJson(needs.parent_step.outputs.concurrent_steps)}}
+    steps:
+      - run: |
+          echo "${{ matrix.value }}"
