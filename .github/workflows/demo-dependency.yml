@@ -12,7 +12,7 @@ jobs:
     name: Parent step
     runs-on: ubuntu-latest
     outputs:
-      concurrent_steps: ${{ steps.matrix.outputs.step_list }}
+      concurrent_steps: ${{ steps.setup.outputs.step_list }}
     steps:
       - name: Set up concurrency
         id: setup
