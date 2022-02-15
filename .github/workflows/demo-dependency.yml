@@ -6,6 +6,9 @@ on:
       concurrent_steps:
         type: number
         default: 3
+      maximum_parallel_steps:
+        type: number
+        default: 2
 
 jobs:
   parent_step:
@@ -17,16 +20,13 @@ jobs:
       - name: Set up concurrency
         id: setup
         run: |
-          echo '::set-output name=step_list::{"value":["1", "2", "3"]}'
+          declare -a concurrent
+          for (( step_number=1; step_number <= ${{ inputs.concurrent_steps }}; step_number++ ))
+          do
+            concurrent+='"Step #'$step_number'"'
+          done
 
-  check_parent_output:
-    name: Debug parent step
-    needs: [ parent_step ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Display steps
-        run: |
-          echo ${{ needs.parent_step.outputs.concurrent_steps }}
+          echo '::set-output name=step_list::{"value":['$(IFS=, ; echo "${concurrent[*]}")']}'
 
   concurrent_step:
     name: Run concurrent steps
@@ -34,6 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.parent_step.outputs.concurrent_steps) }}
-    steps:
+      max-parallel: ${{ inputs.maximum_parallel_steps }}
+      steps:
       - run: |
           echo "${{ matrix.value }}"
