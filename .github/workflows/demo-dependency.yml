@@ -30,7 +30,7 @@ jobs:
 
   concurrent_step:
     name: Run concurrent steps
-    needs: [ parent_step, check_parent_output ]
+    needs: [ parent_step ]
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.parent_step.outputs.concurrent_steps) }}
