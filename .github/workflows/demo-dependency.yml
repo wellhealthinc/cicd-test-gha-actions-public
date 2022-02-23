@@ -9,11 +9,14 @@ on:
       maximum_parallel_steps:
         type: number
         default: 2
+      runner:
+        type: string
+        default: ubuntu-latest
 
 jobs:
   parent_job:
     name: Parent job
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     outputs:
       concurrent_steps: ${{ steps.setup.outputs.step_list }}
     steps:
@@ -34,7 +37,7 @@ jobs:
   dependency_job1:
     name: Dependency job 1
     needs: [ parent_job ]
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     steps:
       - name: Initial step
         run: echo This is the first step
@@ -44,7 +47,7 @@ jobs:
   dependency_job2:
     name: Dependency job 2
     needs: [ parent_job ]
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     steps:
       - name: Initial step
         run: echo This is the first step
@@ -54,7 +57,7 @@ jobs:
   dependency_job3:
     name: Dependency job 3
     needs: [ parent_job ]
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     steps:
       - name: Initial step
         run: echo This is the first step
@@ -64,7 +67,7 @@ jobs:
   concurrent_step:
     name: Run concurrent steps after job 2
     needs: [ parent_job, dependency_job2 ]
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     strategy:
       matrix: ${{ fromJSON(needs.parent_job.outputs.concurrent_steps) }}
       max-parallel: ${{ inputs.maximum_parallel_steps }}

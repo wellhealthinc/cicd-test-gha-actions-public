@@ -6,6 +6,9 @@ on:
       context_name:
         type: string
         default: github
+      runner:
+        type: string
+        default: ubuntu-latest
     outputs:
       context_artifact:
         description: 'Context artifact name'
@@ -14,7 +17,7 @@ on:
 jobs:
   upload_context:
     name: Upload ${{ inputs.context_name }} object as an artifact
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner }}
     outputs:
       context_artifact: ${{ steps.upload_context.outputs.context_artifact }}
     steps:
